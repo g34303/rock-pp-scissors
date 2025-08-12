@@ -1,0 +1,224 @@
+body {
+    background: #8138c9;
+    background: radial-gradient(circle,rgba(129, 56, 201, 1) 0%, rgba(94, 30, 158, 1) 80%, rgba(75, 21, 130, 1) 95%);
+    color: white;
+    font-family: "Noto Sans", sans-serif;
+}
+
+#content {
+    min-height: 100vh;
+    padding: 0 5% 0 5%;
+}
+
+#logo {
+    margin-top: 30px;
+    text-align: center;
+}
+
+#gameboard-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+}
+
+#gameboard-middle {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    text-align: center;
+}
+
+#gameboard-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+}
+
+#gameboard-bottom button {
+    font-family: "Noto Sans", sans-serif;
+    background-color: rgba(0,0,0,0.5);
+    cursor: pointer;
+}
+
+#p1-buttons button {
+    border-radius: 10px;
+    padding: 22px 10px 22px 10px;
+    border: 2px solid black;
+}
+ 
+#p1-buttons button:hover {
+    border: 2px solid rgb(0, 0, 86);
+    background-color: rgba(12, 30, 233, 0.5);
+}
+
+#p1-buttons button.active {
+    border: 2px solid blue;
+    background-color: rgba(12, 30, 233, 0.5);
+}
+
+#p2-buttons button {
+    border-radius: 10px;
+    padding: 22px 41px 22px 41px;
+    border: 2px solid black;
+    cursor: default;
+}
+
+#p2-wins {
+    text-align: center;
+}
+
+.dot {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    height: 26px;
+    width: 26px;
+    background-color: rgb(31, 31, 31);
+    border-radius: 50%;
+}
+
+.win-dot {
+    height: 20px;
+    width: 20px;
+    background-color: yellow;
+    background: linear-gradient(22deg,rgba(194, 165, 21, 1) 0%, rgba(240, 232, 187, 1) 100%);
+    border-radius: 50%;
+}
+
+#player2name {
+    text-align: center;
+    filter: drop-shadow(0 0 0.75rem black);
+}
+
+#played-hand {
+    height: 300px;
+    width: 300px;
+    margin: 0 auto;
+    display: grid; /* getting it centered raaa*/
+    place-items: center; /* getting it centered raaa*/
+}
+
+#played-hand img {
+    position: absolute;
+    text-align: center;
+}
+
+#played-hand-p2 {
+    height: 300px;
+    width: 300px;
+    margin: 0 auto;
+    display: grid; /* getting it centered raaa*/
+    place-items: center; /* getting it centered raaa*/
+}
+
+#chatbox {
+    height: 80px;
+    margin: 0 auto;
+    margin-top: 15px;
+    filter: drop-shadow(0 0 0.75rem rgba(0,0,0,0.3));
+}
+
+button.green {
+  width: 40%;
+  transition: all 20ms;
+  margin: 30px auto;
+  text-align: center;
+  padding: 0;
+  padding-bottom: 10px;
+  border-radius: 20px;
+  box-shadow: 0px 3px 4px;
+  border: 0;
+  color: #32343a;
+  cursor: pointer;
+  background-image: linear-gradient(to right, #36a543, #25854b, #36a543);
+}
+
+button.green div {
+  border: none;
+  border-radius: 20px;
+  padding: 2% 0%;
+  font-weight: 900;
+  font-size: 3rem;
+  background-image: radial-gradient(100% 120% at 50% 100%, #6dd91a 50%, #c9f117);
+  color: white;
+}
+
+button.green:active {
+  padding-bottom: 5px;
+  margin-top: 35px;
+}
+
+.dots::after {
+  content: '';
+  display: inline-block;
+  width: 1ch;
+  animation: dots 1.2s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%   { content: ''; }
+  25%  { content: '.'; }
+  50%  { content: '..'; }
+  75%  { content: '...'; }
+  100% { content: ''; }
+}
+
+/* for the timer */
+#timer {
+  display: grid;
+  place-items: center;
+}
+
+.base-timer {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.base-timer__svg {
+  transform: scaleX(-1);
+}
+
+.base-timer__circle {
+  fill: none;
+  stroke: none;
+}
+
+.base-timer__path-elapsed {
+  stroke-width: 7px;
+  stroke: grey;
+}
+
+.base-timer__path-remaining {
+  stroke-width: 7px;
+  stroke-linecap: round;
+  transform: rotate(90deg);
+  transform-origin: center;
+  transition: 1s linear all;
+  fill-rule: nonzero;
+  stroke: currentColor;
+}
+
+.base-timer__path-remaining.green {
+  color: rgb(65, 184, 131);
+}
+
+.base-timer__path-remaining.orange {
+  color: orange;
+}
+
+.base-timer__path-remaining.red {
+  color: red;
+}
+
+.base-timer__label {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+}
+/* end of stuff for the timer */
