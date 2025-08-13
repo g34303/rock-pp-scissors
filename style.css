@@ -1,6 +1,6 @@
 body {
     background: #8138c9;
-    background: radial-gradient(circle,rgba(129, 56, 201, 1) 0%, rgba(94, 30, 158, 1) 80%, rgba(75, 21, 130, 1) 95%);
+    background: radial-gradient(circle,rgba(129, 56, 201, 1) 0%, rgba(94, 30, 158, 1) 25%, rgba(83, 25, 142, 1) 85%, rgba(54, 9, 99, 1) 100%);
     color: white;
     font-family: "Noto Sans", sans-serif;
 }
@@ -15,6 +15,32 @@ body {
     text-align: center;
 }
 
+#prescreen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  text-align: center;
+}
+
+input[type="text"] {
+  width: 250px;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 3px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  font-family: "Noto Sans", sans-serif;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* When focused (clicked into) */
+input[type="text"]:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
+
 #gameboard-top {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -23,7 +49,7 @@ body {
 
 #gameboard-middle {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     text-align: center;
 }
 
@@ -44,14 +70,18 @@ body {
     padding: 22px 10px 22px 10px;
     border: 2px solid black;
 }
+
+#p1-buttons button:hover img {
+  opacity: 0.5;
+}
  
 #p1-buttons button:hover {
-    border: 2px solid rgb(0, 0, 86);
-    background-color: rgba(12, 30, 233, 0.5);
+    border: 2px solid blue;
+    fill: rgba(12, 30, 233, 0.5);
 }
 
 #p1-buttons button.active {
-    border: 2px solid blue;
+    border: 2px solid rgb(0, 0, 86);
     background-color: rgba(12, 30, 233, 0.5);
 }
 
@@ -118,7 +148,7 @@ body {
     filter: drop-shadow(0 0 0.75rem rgba(0,0,0,0.3));
 }
 
-button.green {
+.gameui-btn {
   width: 40%;
   transition: all 20ms;
   margin: 30px auto;
@@ -133,7 +163,18 @@ button.green {
   background-image: linear-gradient(to right, #36a543, #25854b, #36a543);
 }
 
-button.green div {
+.gameui-btn:disabled {
+  pointer-events: none;
+  color: #32343a;
+  background-image: linear-gradient(to right, #97989c, #65666b, #97989c);
+}
+
+.gameui-btn:disabled div {
+  background-image: radial-gradient(100% 120% at 50% 100%, #e0e2d5 50%, #fffdf1);
+  color: #aaaaaa;
+}
+
+button.gameui-btn div {
   border: none;
   border-radius: 20px;
   padding: 2% 0%;
@@ -143,7 +184,7 @@ button.green div {
   color: white;
 }
 
-button.green:active {
+button.gameui-btn:active {
   padding-bottom: 5px;
   margin-top: 35px;
 }
@@ -165,6 +206,10 @@ button.green:active {
 
 /* for the timer */
 #timer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: grid;
   place-items: center;
 }

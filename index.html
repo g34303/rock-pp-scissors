@@ -13,9 +13,16 @@
 
     <body>
         <div id="content">
+            <div id="prescreen">
+                <h1>What's your name?</h1>
+                <div><input type="text" id="name-input" placeholder="Enter" autofocus></div>
+                <button class="gameui-btn" id="start-game" style="width:75%" disabled><div>Start</div></button>
+            </div> <!-- closes prescreen -->
             <div id="logo">
             <img src="https://dabonsym.com/wp-content/uploads/2025/08/rock-paper-scissors-logo-250pxl-min.png" alt="Rock-paper-scissors-logo">
             </div>
+            <div id="mainscreen" style="display:none">
+            <div id="timer"></div>
             <div id="gameboard-top">
                 <div id="wins">
                     <div class="dot"><div class="win-dot" id="player1-win1"></div></div>
@@ -36,7 +43,6 @@
                     <img src="https://dabonsym.com/wp-content/uploads/2025/08/angled-hand-rock-250px-min.png" width="320" height="200">
                     <img src="https://dabonsym.com/wp-content/uploads/2025/08/angled-hand-scissors-250px-min.png" width="320" height="200">
                 </div> <!-- this closes played-hand -->
-                <div id="timer"></div>
                 <div id="played-hand-p2">
                     <img src="https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png" height="200">
                 </div>
@@ -52,9 +58,11 @@
                     <button><img src="https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png" height="68"></button>
                     <button><img src="https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png" height="68"></button>
                 </div> <!-- this closes p2-buttons -->
-                <button class="green"><div>Confirm</div></button>
+                <button class="gameui-btn" id="confirm-button" disabled><div>Confirm</div></button>
                 <div class="thinking"><h1>Selecting<span class="dots"></h1></span>
+                </div> <!-- this closes thinking -->
             </div> <!-- this closes gameboard-button -->
+            </div> <!-- this closes mainscreen -->
         </div> <!-- this closes content -->
     </body>
 </html>
