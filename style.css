@@ -6,13 +6,14 @@ body {
 }
 
 #content {
-    min-height: 100vh;
+    min-height: 95vh;
     padding: 0 5% 0 5%;
 }
 
 #logo {
     margin-top: 30px;
     text-align: center;
+    height: 100px;
 }
 
 #prescreen {
@@ -115,7 +116,7 @@ input[type="text"]:focus {
     border-radius: 50%;
 }
 
-#player2name {
+#gameboard-top h1 {
     text-align: center;
     filter: drop-shadow(0 0 0.75rem black);
 }
@@ -141,11 +142,39 @@ input[type="text"]:focus {
     place-items: center; /* getting it centered raaa*/
 }
 
+#chatbox-wrapper {
+ position: relative; 
+}
+
 #chatbox {
     height: 80px;
     margin: 0 auto;
     margin-top: 15px;
-    filter: drop-shadow(0 0 0.75rem rgba(0,0,0,0.3));
+    z-index: 0;
+}
+
+#chatbox-wrapper svg {
+  position: relative;
+  text-align: center;
+  height: 30px;
+  width: 30px;
+  top: 0;
+  left: 0;
+  z-index: 1; /* higher than the image */
+}
+
+#chatbox-wrapper h1 {
+  display: inline-block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 15px;
+  background: #005AFF;
+  filter: drop-shadow(0 0 0.75rem rgba(0,0,0,0.5));
+}
+
+button:disabled {
+    pointer-events: none;
+    user-select: none;
 }
 
 .gameui-btn {
@@ -164,7 +193,6 @@ input[type="text"]:focus {
 }
 
 .gameui-btn:disabled {
-  pointer-events: none;
   color: #32343a;
   background-image: linear-gradient(to right, #97989c, #65666b, #97989c);
 }
@@ -202,6 +230,38 @@ button.gameui-btn:active {
   50%  { content: '..'; }
   75%  { content: '...'; }
   100% { content: ''; }
+}
+
+/* for the looking for opponent dots */
+    .loader-container {
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: visible;
+      margin-top: 20%;
+    }
+    .loader-container svg {
+      position: relative;
+      width: 165px;
+      height: 60px;
+      overflow: visible;
+      margin-top: 2%;
+      filter: drop-shadow(0 0 0.75rem rgba(0,0,0,0.5));
+    }
+
+@keyframes colorCycle {
+  0%   { color: #d6a9ff; } /* light purple */
+  33%  { color: #e4c3ff; } /* even lighter purple */
+  66%  { color: #f0d9ff; } /* very pale purple */
+  100% { color: #d6a9ff; } /* back to start */
+}
+
+.animated-text {
+  font-size: 90px;
+  font-family: "Noto Sans", sans-serif;
+  filter: drop-shadow(0 0 0.75rem rgba(0,0,0,0.5));
+  animation: colorCycle 1.6s infinite;
 }
 
 /* for the timer */
@@ -267,3 +327,187 @@ button.gameui-btn:active {
   font-size: 36px;
 }
 /* end of stuff for the timer */
+
+/* arrow-guide */
+.arrow-guide {
+  /* position: absolute; */
+  z-index: -1;
+  top: -3em;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 1em;
+  cursor: default;
+  transition: opacity .3s;
+}
+@media (min-height: 480px) {
+  .arrow-guide {
+    top: 0;
+  }
+}
+
+.arrow-guide__inside {
+  position: relative;
+  height: 100%;
+  text-align: center;
+  font-size: .75em;
+  color: #600;
+  perspective: 700px;
+}
+@media (min-width: 768px) and (min-height: 768px) {
+  .arrow-guide__inside {
+    font-size: 1.25em;
+  }
+}
+
+.arrow-guide__arrow {
+  position: absolute;
+  z-index: -1;
+  font-size: 3em;
+  top: 50%;
+  left: 50%;
+  background-color: #ef4723;
+  width: 2em;
+  height: 1.1em;
+  margin-left: -1em;
+  animation: arrow 1.5s ease-in-out infinite;
+  transform: rotateX(-25deg) rotateY(0deg) translate3d(0, 0.35em, 0);
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+}
+.arrow-guide__arrow::before {
+  display: block;
+  content: '';
+  position: absolute;
+  top: -0.495em;
+  left: 0;
+  height: 0.5em;
+  width: 100%;
+  background-color: #f2877d;
+  transform: rotateX(90deg) rotateY(0deg);
+  transform-style: preserve-3d;
+  transform-origin: 50% 100%;
+}
+@media (min-height: 768px) {
+  .arrow-guide__arrow {
+    margin-top: -0.65em;
+  }
+}
+
+.arrow-guide__line {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: -1rem;
+  background: #ef4723;
+}
+
+.arrow-guide__point {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  width: 0;
+  height: 0;
+  border: 1.5em solid transparent;
+  border-top: 1em solid #ef4723;
+  border-bottom: 0;
+  bottom: -0.99em;
+  left: -0.5em;
+}
+.arrow-guide__point::before {
+  display: block;
+  content: '';
+  position: absolute;
+  top: -1.495em;
+  left: -1.5em;
+  height: 0.5em;
+  width: 3em;
+  background-color: #f2877d;
+  transform: rotateX(90deg) rotateY(0deg);
+  transform-style: preserve-3d;
+  transform-origin: 50% 100%;
+}
+
+@media (min-width: 768px) and (min-height: 768px) {
+  .arrow-guide__text {
+    margin-top: 1.5em;
+    font-size: 0.25em;
+    line-height: 1.2em;
+  }
+  .arrow-guide__text::before {
+    content: attr(data-click-text);
+  }
+}
+
+/* animation */
+@keyframes arrow {
+  0% {
+    transform: rotateX(-20deg) rotateY(0deg) translate3d(0, -0.1em, 0);
+  }
+  35% {
+    transform: rotateX(-25deg) rotateY(0deg) translate3d(0, 0.35em, 0);
+  }
+  100% {
+    transform: rotateX(-20deg) rotateY(0deg) translate3d(0, -0.1em, 0);
+  }
+}
+
+/* green check mark */
+
+.approve_icon {
+  position: relative;
+  top: 50%;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+  margin: 0 auto;
+  box-shadow: inset 0px 0px 0px #80d100;
+  animation: fill 0.4s ease-in-out 0.4s forwards,
+             scale 0.3s ease-in-out 0.9s both;
+  margin-top: -100px;
+}
+
+.approve_icon_circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #80d100;
+  fill: none;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.approve_icon_check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scale {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+
+@keyframes fill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px #80d100;
+  }
+}
