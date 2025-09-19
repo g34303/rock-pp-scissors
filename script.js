@@ -28,6 +28,12 @@ const HAND_IMAGE_SOURCES = {
 const QUESTION_MARK_SRC =
   "https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png";
 
+const READY_TIMER_DELAY_MS = 1000;
+const READY_SHAKE_DELAY_MS = 4000;
+const READY_ANIMATION_DURATION_MS = 3000;
+const READY_REVEAL_DELAY_MS =
+  READY_TIMER_DELAY_MS + READY_SHAKE_DELAY_MS + READY_ANIMATION_DURATION_MS;
+
 const outcome = {
   "rock-rock": "tie",
   "rock-paper": "p2",
@@ -686,7 +692,7 @@ function revealHand() {
 
     // check to make sure no one has won yet, if so then show the play again button
     (numOfWinsP1 >= 2 || numOfWinsP2 >= 2) ? playAgain() : countdownToRound();
-  }, 5000);
+  }, READY_REVEAL_DELAY_MS);
   // hide the green checkmarks
   // document.querySelectorAll("svg.approve_icon").forEach((el) => {
   //   el.style.visibility = "hidden";
@@ -727,21 +733,39 @@ function changeTimer() {
       </div>
     </div>
     `;
-    
+
     setTimeout(() => {
       const rockDisplaySrc = HAND_IMAGE_SOURCES.rock.display;
 
-      // Do not overwrite P2's revealed image; revealHand will handle that.
-      const p2Container = document.getElementById("p2side");
-      let p2played = p2Container?.querySelector("img");
+      const setP2ReadyState = (img) => {
+        if (!img) return;
+        img.src = rockDisplaySrc;
+        img.dataset.readyState = "ready-rock";
+        img.hidden = false;
+        img.setAttribute("draggable", "false");
+        img.style.height = "200px";
+        img.style.filter = "";
+        img.style.transform = "scaleX(-1)";
+        img.classList.remove("shaking-animation-p2");
+        void img.offsetWidth;
+        img.classList.add("shaking-animation-p2");
+      };
 
-      if (p2Container && !p2played) {
-        p2played = document.createElement("img");
-        p2played.height = 200;
-        p2played.draggable = false;
-        p2Container.innerHTML = "";
-        p2Container.appendChild(p2played);
+      const p2Container = document.getElementById("p2side");
+      if (p2Container) {
+        let p2played = p2Container.querySelector("img");
+        if (!p2played) {
+          p2played = document.createElement("img");
+          p2played.height = 200;
+          p2Container.innerHTML = "";
+          p2Container.appendChild(p2played);
+        }
+        setP2ReadyState(p2played);
       }
+
+      document
+        .querySelectorAll("#played-hand-p2 img")
+        .forEach((img) => setP2ReadyState(img));
 
       // For P1: only overwrite the image with rock if the player hasn't selected a hand
       const activeP1 = document.querySelector("#played-hand img.active");
@@ -764,19 +788,8 @@ function changeTimer() {
         const userRock = document.querySelector("#played-hand img.rock");
         if (userRock) userRock.classList.add("shaking-animation");
       }
-
-      if (p2played) {
-        const readyState = p2played.dataset.readyState ?? "question";
-        if (readyState !== "revealed") {
-          p2played.src = rockDisplaySrc;
-          p2played.dataset.readyState = "ready-rock";
-          p2played.hidden = false;
-        }
-        p2played.style.transform = "scaleX(-1)";
-        p2played.classList.add("shaking-animation-p2");
-      }
-    }, 4000);
-  }, 1000);
+    }, READY_SHAKE_DELAY_MS);
+  }, READY_TIMER_DELAY_MS);
 }
 
 // shortcut to skip to mainscreen
