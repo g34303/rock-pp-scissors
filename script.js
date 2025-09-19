@@ -696,9 +696,13 @@ function changeTimer() {
     setTimeout(() => {
       const rockSrc =
         "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-512px-smaller-min.png";
+      const p2RockSrc =
+        "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-512px-smaller-min.png";
+      const questionMarkSrc =
+        "https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png";
 
-  // Do not overwrite P2's selected image here; revealHand will set P2 image
-  const p2played = document.querySelector("#played-hand-p2 img");
+      // Do not overwrite P2's revealed image; revealHand will handle that.
+      const p2played = document.querySelector("#played-hand-p2 img");
 
       // For P1: only overwrite the image with rock if the player hasn't selected a hand
       const activeP1 = document.querySelector("#played-hand img.active");
@@ -722,7 +726,14 @@ function changeTimer() {
         if (userRock) userRock.classList.add("shaking-animation");
       }
 
-      if (p2played) p2played.classList.add("shaking-animation-p2");
+      if (p2played) {
+        const currentSrc = p2played.getAttribute("src") ?? "";
+        if (currentSrc === questionMarkSrc) {
+          p2played.src = p2RockSrc;
+          p2played.style.transform = "scaleX(-1)";
+        }
+        p2played.classList.add("shaking-animation-p2");
+      }
     }, 4000);
   }, 1000);
 }
