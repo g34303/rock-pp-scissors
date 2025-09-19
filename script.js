@@ -126,6 +126,11 @@ function startRound() {
     document.getElementById(
       "p2side"
     ).innerHTML = `<img src="https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png" height="200" draggable="false">`;
+    const p2QuestionMark = document.querySelector("#p2side img");
+    if (p2QuestionMark) {
+      p2QuestionMark.dataset.readyState = "question";
+      p2QuestionMark.hidden = false;
+    }
     document.querySelectorAll("#p2-buttons img").forEach((s) => {
       const questionMarkSrc =
         "https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png";
@@ -384,6 +389,7 @@ function resetGameUI() {
   }
   p2sideImg.src =
     "https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png";
+  p2sideImg.dataset.readyState = "question";
   p2sideImg.style.transform = "scale(1) scaleX(1)";
   p2sideImg.style.filter = "";
   p2sideImg.style.height = "200px";
@@ -562,6 +568,11 @@ function revealHand() {
       document.querySelector("#played-hand-p2 img").src =
         "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-scissors-512px-min.png";
     }
+    const p2Revealed = document.querySelector("#p2side img");
+    if (p2Revealed) {
+      p2Revealed.dataset.readyState = "revealed";
+      p2Revealed.hidden = false;
+    }
     document.querySelectorAll("#p2-buttons button.active").forEach((btn) => {
       btn.style.padding = "22px 11px 22px 11px";
     });
@@ -696,24 +707,40 @@ function changeTimer() {
     setTimeout(() => {
       const rockSrc =
         "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-512px-smaller-min.png";
+      const p2RockSrc =
+        "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-512px-smaller-min.png";
 
-  // Do not overwrite P2's selected image here; revealHand will set P2 image
-  const p2played = document.querySelector("#played-hand-p2 img");
+      // Do not overwrite P2's revealed image; revealHand will handle that.
+      const p2Container = document.getElementById("p2side");
+      let p2played = p2Container?.querySelector("img");
 
-      // For P1: only overwrite the image with rock if the player hasn't selected a hand
-      const activeP1 = document.querySelector("#played-hand img.active");
-      if (activeP1) {
-        // player's chosen image exists; animate that element
-        activeP1.classList.add("shaking-animation");
-      } else {
-        // no selection — show rock as the default during ready animation
-        const p1Rock = document.querySelector("#played-hand img.rock");
-        if (p1Rock) {
-          p1Rock.hidden = false;
-          p1Rock.classList.add("active");
-          p1Rock.src = rockSrc;
-          p1Rock.classList.add("shaking-animation");
-        }
+      if (p2Container && !p2played) {
+        p2played = document.createElement("img");
+        p2played.height = 200;
+        p2played.draggable = false;
+        p2Container.innerHTML = "";
+        p2Container.appendChild(p2played);
+      }
+
+      // Always show rock shaking for P1
+      const p1Rock = document.querySelector("#played-hand img.rock");
+      if (p1Rock) {
+        // hide all other hands first
+        document.querySelectorAll("#played-hand img").forEach(img => {
+          img.hidden = true;
+          img.classList.remove("active", "shaking-animation");
+        });
+        p1Rock.hidden = false;
+        p1Rock.classList.add("active", "shaking-animation");
+      }
+
+      // Always show rock shaking for P2
+      if (p2played) {
+        p2played.src = "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-512px-smaller-min.png";
+        p2played.dataset.readyState = "ready-rock";
+        p2played.hidden = false;
+        p2played.style.transform = "scaleX(-1)";
+        p2played.classList.add("shaking-animation-p2");
       }
 
       // If player explicitly selected rock (player1hand may be 'rock'), ensure it shakes
@@ -722,7 +749,16 @@ function changeTimer() {
         if (userRock) userRock.classList.add("shaking-animation");
       }
 
-      if (p2played) p2played.classList.add("shaking-animation-p2");
+      if (p2played) {
+        const readyState = p2played.dataset.readyState ?? "question";
+        if (readyState !== "revealed") {
+          p2played.src = p2RockSrc;
+          p2played.dataset.readyState = "ready-rock";
+          p2played.hidden = false;
+        }
+        p2played.style.transform = "scaleX(-1)";
+        p2played.classList.add("shaking-animation-p2");
+      }
     }, 4000);
   }, 1000);
 }
