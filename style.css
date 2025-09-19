@@ -219,6 +219,24 @@ input[type="text"]:focus {
     border-radius: 50%;
 }
 
+.scale-up {
+  animation: scaleUp 1s forwards;
+}
+
+@keyframes scaleUp {
+  0% {transform: scale(1);}
+  100% {transform: scale(1.5);}
+}
+
+.scale-up-p2 {
+  animation: scaleUpP2 1s forwards;
+}
+
+@keyframes scaleUpP2 {
+  0% {transform: scaleX(-1) scale(1);}
+  100% {transform: scaleX(-1) scale(1.5);}
+}
+
 .winorloss-dot {
   visibility: hidden;
     height: 20px;
