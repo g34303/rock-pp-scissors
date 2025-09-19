@@ -6,6 +6,28 @@ const playableHands = {
   3: () => "scissors",
 };
 
+const HAND_IMAGE_SOURCES = {
+  rock: {
+    button: "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-150px-smaller-min.png",
+    display:
+      "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-512px-smaller-min.png",
+  },
+  paper: {
+    button: "https://dabonsym.com/wp-content/uploads/2025/08/angled-hand-paper-150px-min.png",
+    display:
+      "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-paper-512px-min.png",
+  },
+  scissors: {
+    button:
+      "https://dabonsym.com/wp-content/uploads/2025/08/angled-hand-scissors-150px-min.png",
+    display:
+      "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-scissors-512px-min.png",
+  },
+};
+
+const QUESTION_MARK_SRC =
+  "https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png";
+
 const outcome = {
   "rock-rock": "tie",
   "rock-paper": "p2",
@@ -125,18 +147,14 @@ function startRound() {
         `;
     document.getElementById(
       "p2side"
-    ).innerHTML = `<img src="https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png" height="200" draggable="false">`;
+    ).innerHTML = `<img src="${QUESTION_MARK_SRC}" height="200" draggable="false">`;
     const p2QuestionMark = document.querySelector("#p2side img");
     if (p2QuestionMark) {
       p2QuestionMark.dataset.readyState = "question";
       p2QuestionMark.hidden = false;
     }
     document.querySelectorAll("#p2-buttons img").forEach((s) => {
-      const questionMarkSrc =
-        "https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png";
-      if (s.src !== questionMarkSrc) {
-        s.src = questionMarkSrc;
-      }
+      s.src = QUESTION_MARK_SRC;
       s.style.visibility = "visible";
       s.style.transform = "scaleX(1)";
       document.querySelectorAll("#p2-buttons button.active").forEach((btn) => {
@@ -387,8 +405,7 @@ function resetGameUI() {
     p2sideImg = document.createElement("img");
     document.getElementById("p2side").appendChild(p2sideImg);
   }
-  p2sideImg.src =
-    "https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png";
+  p2sideImg.src = QUESTION_MARK_SRC;
   p2sideImg.dataset.readyState = "question";
   p2sideImg.style.transform = "scale(1) scaleX(1)";
   p2sideImg.style.filter = "";
@@ -397,8 +414,7 @@ function resetGameUI() {
   p2sideImg.hidden = false;
 
   document.querySelectorAll("#p2-buttons img").forEach((s) => {
-    s.src =
-      "https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png";
+    s.src = QUESTION_MARK_SRC;
     s.style.visibility = "visible";
     s.style.transform = "scaleX(1)";
   });
@@ -522,57 +538,65 @@ function revealHand() {
     fadeAndHide(document.querySelectorAll("#p2-buttons button"));
     // fadeAndHide(document.querySelectorAll(".radial_stripes"));
 
-    document.querySelectorAll("#p2-buttons button").forEach((btn) => {
-      // remove active from all buttons
-      document
-        .querySelectorAll("#p2-buttons button")
-        .forEach((b) => b.classList.remove("active"));
+    const opponentAssets = HAND_IMAGE_SOURCES[player2hand];
+    const p2Buttons = document.querySelectorAll("#p2-buttons button");
+    p2Buttons.forEach((btn) => {
+      btn.classList.remove("active");
+      btn.style.padding = "22px 41px 22px 41px";
     });
-    // need to flip all imgs on p2 side
-    document.querySelector("#p2side img").style.transform = "scaleX(-1)";
-    document
-      .querySelectorAll("#p2-buttons img")
-      .forEach((s) => (s.style.transform = "scaleX(-1)"));
-    if (player2hand === "rock") {
-      document.querySelector("#p2-buttons button.rock").classList.add("active");
-      document.querySelector("#p2-buttons .rock img").src =
-        "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-150px-smaller-min.png";
-      document.querySelector("#p2-buttons .paper img").style.visibility =
-        "hidden";
-      document.querySelector("#p2-buttons .scissors img").style.visibility =
-        "hidden";
-      document.querySelector("#played-hand-p2 img").src =
-        "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-512px-smaller-min.png";
-    } else if (player2hand === "paper") {
-      document
-        .querySelector("#p2-buttons button.paper")
-        .classList.add("active");
-      document.querySelector("#p2-buttons .rock img").style.visibility =
-        "hidden";
-      document.querySelector("#p2-buttons .paper img").src =
-        "https://dabonsym.com/wp-content/uploads/2025/08/angled-hand-paper-150px-min.png";
-      document.querySelector("#p2-buttons .scissors img").style.visibility =
-        "hidden";
-      document.querySelector("#played-hand-p2 img").src =
-        "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-paper-512px-min.png";
-    } else if (player2hand === "scissors") {
-      document
-        .querySelector("#p2-buttons button.scissors")
-        .classList.add("active");
-      document.querySelector("#p2-buttons .rock img").style.visibility =
-        "hidden";
-      document.querySelector("#p2-buttons .paper img").style.visibility =
-        "hidden";
-      document.querySelector("#p2-buttons .scissors img").src =
-        "https://dabonsym.com/wp-content/uploads/2025/08/angled-hand-scissors-150px-min.png";
-      document.querySelector("#played-hand-p2 img").src =
-        "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-scissors-512px-min.png";
+
+    const p2ButtonImages = document.querySelectorAll("#p2-buttons img");
+    p2ButtonImages.forEach((img) => {
+      img.style.transform = "scaleX(-1)";
+      img.style.visibility = "hidden";
+    });
+
+    const p2Container = document.getElementById("p2side");
+    let p2Display = p2Container?.querySelector("img");
+    if (p2Container && !p2Display) {
+      p2Display = document.createElement("img");
+      p2Display.height = 200;
+      p2Display.draggable = false;
+      p2Container.innerHTML = '';
+      p2Container.appendChild(p2Display);
     }
-    const p2Revealed = document.querySelector("#p2side img");
-    if (p2Revealed) {
-      p2Revealed.dataset.readyState = "revealed";
-      p2Revealed.hidden = false;
+
+    if (p2Display) {
+      p2Display.style.transform = "scaleX(-1)";
     }
+
+    if (opponentAssets) {
+      const activeButton = document.querySelector(
+        `#p2-buttons button.${player2hand}`
+      );
+      const activeButtonImg = activeButton?.querySelector("img");
+
+      if (activeButton) {
+        activeButton.classList.add("active");
+        activeButton.style.padding = "22px 11px 22px 11px";
+      }
+
+      if (activeButtonImg) {
+        activeButtonImg.src = opponentAssets.button;
+        activeButtonImg.style.visibility = "visible";
+      }
+
+      if (p2Display) {
+        p2Display.src = opponentAssets.display;
+        p2Display.dataset.readyState = "revealed";
+        p2Display.hidden = false;
+        p2Display.classList.remove("shaking-animation-p2");
+      }
+
+      document.querySelectorAll("#played-hand-p2 img").forEach((img) => {
+        img.src = opponentAssets.display;
+        img.hidden = false;
+        img.dataset.readyState = "revealed";
+        img.style.transform = "scaleX(-1)";
+        img.classList.remove("shaking-animation-p2");
+      });
+    }
+
     document.querySelectorAll("#p2-buttons button.active").forEach((btn) => {
       btn.style.padding = "22px 11px 22px 11px";
     });
@@ -705,10 +729,7 @@ function changeTimer() {
     `;
     
     setTimeout(() => {
-      const rockSrc =
-        "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-512px-smaller-min.png";
-      const p2RockSrc =
-        "https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-512px-smaller-min.png";
+      const rockDisplaySrc = HAND_IMAGE_SOURCES.rock.display;
 
       // Do not overwrite P2's revealed image; revealHand will handle that.
       const p2Container = document.getElementById("p2side");
@@ -733,7 +754,7 @@ function changeTimer() {
         if (p1Rock) {
           p1Rock.hidden = false;
           p1Rock.classList.add("active");
-          p1Rock.src = rockSrc;
+          p1Rock.src = rockDisplaySrc;
           p1Rock.classList.add("shaking-animation");
         }
       }
@@ -747,7 +768,7 @@ function changeTimer() {
       if (p2played) {
         const readyState = p2played.dataset.readyState ?? "question";
         if (readyState !== "revealed") {
-          p2played.src = p2RockSrc;
+          p2played.src = rockDisplaySrc;
           p2played.dataset.readyState = "ready-rock";
           p2played.hidden = false;
         }
