@@ -33,6 +33,11 @@ const READY_SHAKE_DELAY_MS = 4000;
 const READY_ANIMATION_DURATION_MS = 3000;
 const READY_REVEAL_DELAY_MS =
   READY_TIMER_DELAY_MS + READY_SHAKE_DELAY_MS + READY_ANIMATION_DURATION_MS;
+const READY_HAND_RESTORE_BUFFER_MS = 500;
+const READY_HAND_RESTORE_DELAY_MS =
+  READY_TIMER_DELAY_MS +
+  READY_SHAKE_DELAY_MS +
+  Math.max(0, READY_ANIMATION_DURATION_MS - READY_HAND_RESTORE_BUFFER_MS);
 
 const outcome = {
   "rock-rock": "tie",
@@ -535,7 +540,53 @@ function showTie() {
 
 // reveal p2 hand
 function revealHand() {
-  let player2hand = playableHands[getRandomIntInclusive(1, 3)]();
+  const player2hand = playableHands[getRandomIntInclusive(1, 3)]();
+  const opponentAssets = HAND_IMAGE_SOURCES[player2hand];
+
+  const restoreHandsBeforeReveal = () => {
+    if (player1hand && HAND_IMAGE_SOURCES[player1hand]) {
+      const playerAssets = HAND_IMAGE_SOURCES[player1hand];
+      const activeP1 = document.querySelector("#played-hand img.active");
+      if (activeP1) {
+        activeP1.src = playerAssets.display;
+        activeP1.hidden = false;
+        activeP1.dataset.readyState = "ready-actual";
+        if (!activeP1.classList.contains("shaking-animation")) {
+          activeP1.classList.add("shaking-animation");
+        }
+      }
+    }
+
+    if (!opponentAssets) {
+      return;
+    }
+
+    const applyOpponentAsset = (img) => {
+      if (!img) return;
+      img.src = opponentAssets.display;
+      img.dataset.readyState = "ready-actual";
+      img.hidden = false;
+      img.style.height = "200px";
+      img.style.transform = "scaleX(-1)";
+      img.style.filter = "";
+      img.setAttribute("draggable", "false");
+      if (!img.classList.contains("shaking-animation-p2")) {
+        img.classList.add("shaking-animation-p2");
+      }
+    };
+
+    const p2Display = document.querySelector("#p2side img");
+    if (p2Display) {
+      applyOpponentAsset(p2Display);
+    }
+
+    document
+      .querySelectorAll("#played-hand-p2 img")
+      .forEach((img) => applyOpponentAsset(img));
+  };
+
+  setTimeout(restoreHandsBeforeReveal, READY_HAND_RESTORE_DELAY_MS);
+
   setTimeout(() => {
     // fadeAndHide(document.querySelectorAll("svg.approve_icon"));
     fadeAndHide(document.querySelectorAll("#thinking"));
@@ -544,7 +595,6 @@ function revealHand() {
     fadeAndHide(document.querySelectorAll("#p2-buttons button"));
     // fadeAndHide(document.querySelectorAll(".radial_stripes"));
 
-    const opponentAssets = HAND_IMAGE_SOURCES[player2hand];
     const p2Buttons = document.querySelectorAll("#p2-buttons button");
     p2Buttons.forEach((btn) => {
       btn.classList.remove("active");
@@ -801,9 +851,17 @@ document.addEventListener("keydown", (event) => {
   if (event.key === targetKey) {
     keyCount++;
     if (keyCount >= triggerCount) {
-      startGame();
-      startRound();
+      keyCount = 0;
+      const mainscreen = document.getElementById("mainscreen");
+      const mainscreenVisible =
+        mainscreen && mainscreen.style.display !== "none";
+
+      if (!mainscreenVisible) {
+        loadGame();
+      }
     }
+  } else {
+    keyCount = 0;
   }
 });
 
