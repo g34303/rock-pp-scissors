@@ -32,7 +32,7 @@ const READY_TIMER_DELAY_MS = 1000;
 const READY_SHAKE_DELAY_MS = 4000;
 const READY_ANIMATION_DURATION_MS = 3000;
 const READY_REVEAL_DELAY_MS =
-  READY_TIMER_DELAY_MS + READY_SHAKE_DELAY_MS + READY_ANIMATION_DURATION_MS;
+  READY_TIMER_DELAY_MS + READY_SHAKE_DELAY_MS + READY_ANIMATION_DURATION_MS - 750;
 
 const outcome = {
   "rock-rock": "tie",
@@ -134,7 +134,6 @@ function loadGame() {
       document.getElementsByClassName("animated-text")[0].innerText = `Starting Game`;
       setTimeout(() => {
         startGame();
-        startRound();
         // resetRound();
       }, 1500);
     }, 1500);
@@ -474,11 +473,6 @@ function resetRound() {
   //   `;
   // }
   resetGameUI();
-  const activeImg = document.querySelector("#played-hand img.active");
-  if (activeImg) {
-    activeImg.classList.remove("scale-up");
-  }
-  document.querySelector("#p2side img").classList.remove("scale-up-p2");
   // removeFadeAndHide(document.querySelectorAll("svg.approve_icon"));
   removeFadeAndHide(document.querySelectorAll("#thinking"));
   removeFadeAndHide(document.querySelectorAll("#wrapper"));
@@ -506,6 +500,7 @@ function startGame() {
   // reset all UI state for a new opponent
   resetRoundVars();
   resetTimer();
+  startRound();
 }
 
 function showWinner() {
@@ -541,12 +536,12 @@ function showTie() {
 // reveal p2 hand
 function revealHand() {
   let player2hand = playableHands[getRandomIntInclusive(1, 3)]();
-  setTimeout(() => {
-    // fadeAndHide(document.querySelectorAll("svg.approve_icon"));
-    fadeAndHide(document.querySelectorAll("#thinking"));
-    fadeAndHide(document.querySelectorAll("#wrapper"));
     fadeAndHide(document.querySelectorAll("#p1-buttons button"));
     fadeAndHide(document.querySelectorAll("#p2-buttons button"));
+    fadeAndHide(document.querySelectorAll("#thinking"));
+    fadeAndHide(document.querySelectorAll("#wrapper"));
+  setTimeout(() => {
+    // fadeAndHide(document.querySelectorAll("svg.approve_icon"));
     // fadeAndHide(document.querySelectorAll(".radial_stripes"));
 
     const opponentAssets = HAND_IMAGE_SOURCES[player2hand];
@@ -571,6 +566,21 @@ function revealHand() {
       p2Container.innerHTML = '';
       p2Container.appendChild(p2Display);
     }
+
+    // --- Restore P1's actual choice if they picked one ---
+if (player1hand) {
+  document.querySelectorAll("#played-hand img").forEach(img => {
+    img.hidden = true;
+    img.classList.remove("active", "shaking-animation");
+  });
+
+  const realP1Img = document.querySelector(`#played-hand img.${player1hand}`);
+  if (realP1Img) {
+    realP1Img.hidden = false;
+    realP1Img.classList.add("active");
+  }
+}
+
 
     if (p2Display) {
       p2Display.style.transform = "scaleX(-1)";
@@ -605,7 +615,6 @@ function revealHand() {
         img.dataset.readyState = "revealed";
         img.style.transform = "scaleX(-1)";
         img.classList.remove("shaking-animation-p2");
-        // img.classList.add(sca)
       });
     }
 
@@ -623,7 +632,7 @@ function revealHand() {
       const activeP1 = document.querySelector("#played-hand img.active");
       if (activeP1) {
         activeP1.style.filter = "drop-shadow(0 0 0.5rem white)";
-        activeP1.classList.add("scale-up");
+        activeP1.style.transform = "scale(1.5)";
       } // for some reason sometimes i get null error so putting this here
       numOfWinsP1++;
       numOfLossesP2++;
@@ -653,9 +662,8 @@ function revealHand() {
       ).style.visibility = "visible";
       document.querySelector("#played-hand-p2 img").style.filter =
         "drop-shadow(0 0 0.5rem white)";
-      // document.querySelector("#played-hand-p2 img").style.transform +=
-      //   "scale(1.5)";
-      document.querySelector("#p2side img").classList.add("scale-up-p2");
+      document.querySelector("#played-hand-p2 img").style.transform +=
+        "scale(1.5)";
       numOfWinsP2++;
       numOfLossesP1++;
       document.getElementsByClassName("winorloss-dot")[3 + (numOfWinsP2 + numOfLossesP2 - 1)
@@ -774,27 +782,25 @@ function changeTimer() {
         .querySelectorAll("#played-hand-p2 img")
         .forEach((img) => setP2ReadyState(img));
 
-      // For P1: only overwrite the image with rock if the player hasn't selected a hand
-      const activeP1 = document.querySelector("#played-hand img.active");
-      if (activeP1) {
-        // player's chosen image exists; animate that element
-        activeP1.classList.add("shaking-animation");
-      } else {
-        // no selection — show rock as the default during ready animation
-        const p1Rock = document.querySelector("#played-hand img.rock");
-        if (p1Rock) {
-          p1Rock.hidden = false;
-          p1Rock.classList.add("active");
-          p1Rock.src = rockDisplaySrc;
-          p1Rock.classList.add("shaking-animation");
-        }
+      // --- Always shake ROCK for P1 during the Ready animation ---
+      const p1Rock = document.querySelector("#played-hand img.rock");
+
+      // hide all P1 hands first
+      document.querySelectorAll("#played-hand img").forEach(img => {
+        img.hidden = true;
+        img.classList.remove("active", "shaking-animation");
+      });
+
+      if (p1Rock) {
+        p1Rock.hidden = false;
+        p1Rock.classList.add("active");
+
+        // restart animation like P2 does
+        p1Rock.classList.remove("shaking-animation");
+        void p1Rock.offsetWidth; // force reflow to reset CSS animation
+        p1Rock.classList.add("shaking-animation");
       }
 
-      // If player explicitly selected rock (player1hand may be 'rock'), ensure it shakes
-      if (player1hand === "rock") {
-        const userRock = document.querySelector("#played-hand img.rock");
-        if (userRock) userRock.classList.add("shaking-animation");
-      }
     }, READY_SHAKE_DELAY_MS);
   }, READY_TIMER_DELAY_MS);
 }
@@ -809,7 +815,6 @@ document.addEventListener("keydown", (event) => {
     keyCount++;
     if (keyCount >= triggerCount) {
       startGame();
-      startRound();
     }
   }
 });
