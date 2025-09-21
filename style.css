@@ -17,6 +17,8 @@ body {
 #content {
     min-height: 95vh;
     padding: 0 5% 0 5%;
+    max-width: 1500px;
+    margin: 0 auto;
 }
 
 #logo {
@@ -102,6 +104,12 @@ input[type="text"]:focus {
   box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
 }
 
+#mainscreen {
+  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
 #gameboard-top {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -148,6 +156,8 @@ input[type="text"]:focus {
     padding: 22px 10px 22px 10px;
     border: 2px solid black;
     transition: 0.2s;
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.5);
 }
  
 #p1-buttons button:hover:not(.active) {
@@ -183,6 +193,7 @@ input[type="text"]:focus {
     padding: 22px 41px 22px 41px;
     border: 2px solid black;
     cursor: default;
+    background-color: rgba(0,0,0,0.5);
 }
 
 #p2-buttons button.active {
@@ -283,7 +294,8 @@ input[type="text"]:focus {
 }
 
 #chatbox-wrapper {
- position: relative; 
+ position: relative;
+ filter: drop-shadow(0 0 0.75rem rgba(0,0,0,0.5));
 }
 
 #chatbox {
@@ -309,7 +321,11 @@ input[type="text"]:focus {
   padding: 10px 20px;
   border-radius: 15px;
   background: #005AFF;
-  filter: drop-shadow(0 0 0.75rem rgba(0,0,0,0.5));
+  filter: drop-shadow(0 0 0.75rem rgba(0,0,0,0.35));
+}
+
+#player2-side h1 {
+  filter: drop-shadow(0 0 0.75rem rgba(0,0,0,1));
 }
 
 button:disabled {
@@ -319,7 +335,7 @@ button:disabled {
 }
 
 .gameui-btn {
-  width: 40%;
+  width: 50%;
   transition: all 20ms;
   margin: 30px auto;
   text-align: center;
@@ -430,7 +446,7 @@ button.gameui-btn:active {
 }
 
 #thinking svg {
-  margin-top: -32px;
+    margin-top: 40px;
 }
 
 /* for the timer */
@@ -1008,4 +1024,10 @@ button.gameui-btn:active {
   display: inline-block;
   position: relative;
   color: inherit !important; /* don’t force to white */
+}
+
+@media (max-width: 767px) {
+  #content {
+    flex-direction: column-reverse;
+  }
 }

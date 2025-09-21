@@ -3,6 +3,7 @@
     <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors Game</title>
     <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -118,51 +119,68 @@
                 </svg>    
             </div>
         </div>
-            <div id="mainscreen" style="display:none">
-            <div id="timer"></div>
-            <div id="gameboard-top">
-                <div id="wins">
-                    <div class="dot"><div class="winorloss-dot"></div></div>
-                    <div class="dot"><div class="winorloss-dot"></div></div>
-                    <div class="dot"><div class="winorloss-dot"></div></div>
-                </div>
-                <div id="p2-wins">
-                    <div class="dot"><div class="winorloss-dot"></div></div>
-                    <div class="dot"><div class="winorloss-dot"></div></div>
-                    <div class="dot"><div class="winorloss-dot"></div></div>
-                </div>
-                <div id="chatbox-wrapper"><img src="https://dabonsym.com/wp-content/uploads/2025/08/blue-chatbox-you-250-centered-min.png" id="chatbox">
-                </div>
-                <h1 id="player2name">Player2 Name</h1>
-            </div> <!-- this closes gameboard-top -->
-            <div id="gameboard-middle">
-                <div id="played-hand">
-                     <div class="radial_stripes">
-                     <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1003.97 1009.5">
-                        <defs>
-                            <style>.cls-1{fill-rule:evenodd;fill:url(#radial-gradient);}</style>
-                            <radialGradient id="radial-gradient" cx="615.23" cy="557.75" r="503.37" gradientUnits="userSpaceOnUse">
-                            <stop offset="0" stop-color="#fff" stop-opacity="0.5"></stop>
-                            <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
-                            </radialGradient>
-                        </defs>
-                        <title>radial-stripes</title>
-                        <path class="cls-1" d="M615.23,53V557.75L510.29,64ZM318.54,149.4,615.23,557.75,409.93,96.64Zm-140.44,156L615.23,557.75,240.13,220ZM113.24,505l502,52.76-480-156Zm21.94,208.74,480.05-156-502,52.76Zm105,181.76,375.1-337.74L178.1,810.13Zm169.8,123.37,205.3-461.11L318.54,966.1Zm205.3,43.64V557.75L510.29,1051.47Zm205.3-43.64L615.23,557.75l104.94,493.72Zm169.8-123.37L615.23,557.75,911.91,966.1Zm104.94-181.76-480-156,437.13,252.38ZM1117.21,505l-502,52.76,502,52.76Zm-64.85-199.62L615.23,557.75l480-156Zm-140.45-156L615.23,557.75,990.33,220ZM720.17,64,615.23,557.75,820.53,96.64Z" transform="translate(-113.24 -53)"></path>
-                    </svg>
-                    </div>
-                    <div class="arrow-guide" id="arrow-guide">
-	                    <div class="arrow-guide__inside">
-		                    <div class="arrow-guide__arrow">
-			                    <div class="arrow-guide__line"></div>
-                                <div class="arrow-guide__point"></div>
-                            </div>
-                        </div>
-                    </div> <!-- closes arrow guide -->
-                    <img class="paper active" id="paper" src="https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-paper-512px-min.png" width="320" height="200" draggable="false" hidden>
-                    <img class="rock" id="rock" src="https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-512px-smaller-min.png" width="320" height="200" draggable="false" hidden>
-                    <img class="scissors" id="scissors" src="https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-scissors-512px-min.png" width="320" height="200" draggable="false" hidden>
-                </div> <!-- this closes played-hand -->
-                <div id="played-hand-p2">
+<div id="mainscreen" style="display:none">
+<div id="player1-side">
+    <div id="wins">
+        <div class="dot"><div class="winorloss-dot"></div></div>
+        <div class="dot"><div class="winorloss-dot"></div></div>
+        <div class="dot"><div class="winorloss-dot"></div></div>
+    </div>
+    <div id="chatbox-wrapper"><img src="https://dabonsym.com/wp-content/uploads/2025/08/blue-chatbox-you-250-centered-min.png" id="chatbox">
+    </div>
+    <div id="played-hand">
+        <div class="radial_stripes">
+        <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1003.97 1009.5">
+        <defs>
+            <style>.cls-1{fill-rule:evenodd;fill:url(#radial-gradient);}</style>
+            <radialGradient id="radial-gradient" cx="615.23" cy="557.75" r="503.37" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#fff" stop-opacity="0.5"></stop>
+            <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+            </radialGradient>
+        </defs>
+        <title>radial-stripes</title>
+        <path class="cls-1" d="M615.23,53V557.75L510.29,64ZM318.54,149.4,615.23,557.75,409.93,96.64Zm-140.44,156L615.23,557.75,240.13,220ZM113.24,505l502,52.76-480-156Zm21.94,208.74,480.05-156-502,52.76Zm105,181.76,375.1-337.74L178.1,810.13Zm169.8,123.37,205.3-461.11L318.54,966.1Zm205.3,43.64V557.75L510.29,1051.47Zm205.3-43.64L615.23,557.75l104.94,493.72Zm169.8-123.37L615.23,557.75,911.91,966.1Zm104.94-181.76-480-156,437.13,252.38ZM1117.21,505l-502,52.76,502,52.76Zm-64.85-199.62L615.23,557.75l480-156Zm-140.45-156L615.23,557.75,990.33,220ZM720.17,64,615.23,557.75,820.53,96.64Z" transform="translate(-113.24 -53)"></path>
+    </svg>
+    </div>
+    <div class="arrow-guide" id="arrow-guide">
+        <div class="arrow-guide__inside">
+            <div class="arrow-guide__arrow">
+                <div class="arrow-guide__line"></div>
+                <div class="arrow-guide__point"></div>
+            </div>
+        </div>
+    </div>
+    <img class="paper active" id="paper" src="https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-paper-512px-min.png" width="320" height="200" draggable="false" hidden>
+    <img class="rock" id="rock" src="https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-512px-smaller-min.png" width="320" height="200" draggable="false" hidden>
+    <img class="scissors" id="scissors" src="https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-scissors-512px-min.png" width="320" height="200" draggable="false" hidden>
+</div>
+                <div id="p1-side">
+                    <div id="p1-buttons">
+                        <button id="rock" class="rock"><img src="https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-150px-smaller-min.png" width="100" draggable="false"></button>
+                        <button id="paper" class="paper"><img src="https://dabonsym.com/wp-content/uploads/2025/08/angled-hand-paper-150px-min.png" width="100" draggable="false"></button>
+                        <button id="scissors" class="scissors"><img src="https://dabonsym.com/wp-content/uploads/2025/08/angled-hand-scissors-150px-min.png" width="100" draggable="false"></button>
+                    </div> <!-- this closes p1-buttons -->
+                    <div id="p1-winner-slot"></div> <!-- winner animation for player 1 -->
+                </div> <!--- this closes p1-side -->
+                    <div id="p1-winner-slot"></div> <!-- winner animation for player 1 -->
+                    <button class="gameui-btn green-btn" id="confirm-button" disabled><div>Confirm</div></button>
+    <div id="wrapper">
+    </div>
+</div>
+<div id="middle-board">
+    <div id="timer"></div>
+    <div id="tie-slot"></div>
+    <div id="nextround"><h2>Next Round in <span id="countdown">3</span></h2></div>
+    <button class="gameui-btn yellow-btn" id="playagain-btn" disabled><div>Play Again</div></button>
+</div>
+<div id="player2-side">
+    <div id="p2-wins">
+        <div class="dot"><div class="winorloss-dot"></div></div>
+        <div class="dot"><div class="winorloss-dot"></div></div>
+        <div class="dot"><div class="winorloss-dot"></div></div>
+    </div>
+    <h1 id="player2name">Player2 Name</h1>
+                    <div id="played-hand-p2">
                     <div class="radial_stripes">
                      <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1003.97 1009.5">
                         <defs>
@@ -181,34 +199,18 @@
                     <use href="#loading-dots-blue"></use>
                     </div>
                 </div>
-                <div id="tie-slot"></div>
-                <div id="nextround"><h2>Next Round in <span id="countdown">3</span></h2></div>
-            </div> <!-- this closes gameboard-middle-->
-            <div id="gameboard-bottom">
-                <div id="p1-side">
-                    <div id="p1-buttons">
-                        <button id="rock" class="rock"><img src="https://dabonsym.com/wp-content/uploads/2025/09/angled-hand-rock-150px-smaller-min.png" width="100" draggable="false"></button>
-                        <button id="paper" class="paper"><img src="https://dabonsym.com/wp-content/uploads/2025/08/angled-hand-paper-150px-min.png" width="100" draggable="false"></button>
-                        <button id="scissors" class="scissors"><img src="https://dabonsym.com/wp-content/uploads/2025/08/angled-hand-scissors-150px-min.png" width="100" draggable="false"></button>
-                    </div> <!-- this closes p1-buttons -->
-                    <div id="p1-winner-slot"></div> <!-- winner animation for player 1 -->
-                </div> <!--- this closes p1-side -->
                 <div id="p2-side">
                     <div id="p2-buttons">
                         <button class="rock"><img src="https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png" height="68" draggable="false"></button>
                         <button id="paper" class="paper"><img src="https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png" height="68" draggable="false"></button>
                         <button id="scissors" class="scissors"><img src="https://dabonsym.com/wp-content/uploads/2025/08/questionmark-150-min.png" height="68" draggable="false"></button>
-                    </div> <!-- this closes p2-buttons -->
-                    <div id="p2-winner-slot"></div> <!-- winner animation for player 2 -->
-                </div> <!--- this closes p2-side -->
-                <button class="gameui-btn green-btn" id="confirm-button" disabled><div>Confirm</div></button>
-                <div id="thinking"><h1>Selecting<span class="dots"></h1></span>
-                </div> <!-- this closes thinking -->
-                <div id="wrapper">
+                    </div>
+                    <div id="p2-winner-slot"></div>
                 </div>
-                <button class="gameui-btn yellow-btn" id="playagain-btn" disabled><div>Play Again</div></button>
-            </div> <!-- this closes gameboard-bottom -->
-            </div> <!-- this closes mainscreen -->
+                <div id="thinking"><h1>Selecting<span class="dots"></h1></span>
+                </div>
+                </div>
+</div>
         </div> <!-- this closes content -->
     </body>
 </html>

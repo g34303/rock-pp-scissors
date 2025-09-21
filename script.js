@@ -473,6 +473,11 @@ function resetRound() {
   //   `;
   // }
   resetGameUI();
+  const activeImg = document.querySelectorAll("#played-hand img");
+    activeImg.forEach((img) => {
+    img.classList.remove("scale-up");
+    });
+  document.querySelector("#p2side img").classList.remove("scale-up-p2");
   // removeFadeAndHide(document.querySelectorAll("svg.approve_icon"));
   removeFadeAndHide(document.querySelectorAll("#thinking"));
   removeFadeAndHide(document.querySelectorAll("#wrapper"));
@@ -568,20 +573,19 @@ function revealHand() {
     }
 
     // --- Restore P1's actual choice if they picked one ---
-if (player1hand) {
-  document.querySelectorAll("#played-hand img").forEach(img => {
-    img.hidden = true;
-    img.classList.remove("active", "shaking-animation");
-  });
+    if (player1hand) {
+      document.querySelectorAll("#played-hand img").forEach(img => {
+        img.hidden = true;
+        img.classList.remove("active", "shaking-animation");
+      });
 
-  const realP1Img = document.querySelector(`#played-hand img.${player1hand}`);
-  if (realP1Img) {
-    realP1Img.hidden = false;
-    realP1Img.classList.add("active");
-  }
-}
-
-
+      const realP1Img = document.querySelector(`#played-hand img.${player1hand}`);
+      if (realP1Img) {
+        realP1Img.hidden = false;
+        realP1Img.classList.add("active");
+      }
+    }
+    
     if (p2Display) {
       p2Display.style.transform = "scaleX(-1)";
     }
@@ -632,7 +636,7 @@ if (player1hand) {
       const activeP1 = document.querySelector("#played-hand img.active");
       if (activeP1) {
         activeP1.style.filter = "drop-shadow(0 0 0.5rem white)";
-        activeP1.style.transform = "scale(1.5)";
+        activeP1.classList.add("scale-up");
       } // for some reason sometimes i get null error so putting this here
       numOfWinsP1++;
       numOfLossesP2++;
@@ -662,8 +666,7 @@ if (player1hand) {
       ).style.visibility = "visible";
       document.querySelector("#played-hand-p2 img").style.filter =
         "drop-shadow(0 0 0.5rem white)";
-      document.querySelector("#played-hand-p2 img").style.transform +=
-        "scale(1.5)";
+      document.querySelector("#p2side img").classList.add("scale-up-p2");
       numOfWinsP2++;
       numOfLossesP1++;
       document.getElementsByClassName("winorloss-dot")[3 + (numOfWinsP2 + numOfLossesP2 - 1)
