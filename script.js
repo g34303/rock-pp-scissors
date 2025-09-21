@@ -46,6 +46,7 @@ const outcome = {
   "scissors-scissors": "tie",
 };
 
+let numOfRounds = 0;
 let numOfWinsP1 = 0;
 let numOfWinsP2 = 0;
 let numOfLossesP1 = 0;
@@ -87,6 +88,29 @@ function hideElement(element) {
 function showElement(element) {
   const sh = document.getElementById(element);
   sh.style.visibility = "visible";
+}
+
+function showCheckmark(side) {
+  const target =
+    side === "p1"
+      ? document.getElementById("wrapper")
+      : document.querySelector("#player2-side #thinking");
+
+  if (target) {
+    target.innerHTML = `
+      <svg class="approve_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="approve_icon_circle" cx="26" cy="26" r="25" fill="none" />
+        <path class="approve_icon_check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+      </svg>
+    `;
+  }
+}
+
+function bothConfirmed() {
+  const p1Ready =
+    document.querySelector("#p1-buttons button.active") && confirmCliked;
+  const p2Ready = document.querySelector("#p2-buttons button.active");
+  return p1Ready && p2Ready;
 }
 
 // function to fade and hide
@@ -133,8 +157,14 @@ function loadGame() {
     setTimeout(() => {
       document.getElementsByClassName("animated-text")[0].innerText = `Starting Game`;
       setTimeout(() => {
-        startGame();
-        // resetRound();
+        if (numOfRounds < 1) {
+          startGame();
+        }
+        else {
+          removeElement("midscreen");
+          document.getElementById("mainscreen").style.display = '';
+          resetRound();
+        }
       }, 1500);
     }, 1500);
   }, getRandomIntInclusive(1500, 5500));
@@ -144,12 +174,13 @@ function loadGame() {
 function startRound() {
   startTimer();
   setTimeout(() => {
-    document.getElementById("thinking").innerHTML = `
-                   <svg class="approve_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                        <circle class="approve_icon_circle" cx="26" cy="26" r="25" fill="none" />
-                        <path class="approve_icon_check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-                    </svg>
-        `;
+    showCheckmark("p2");
+    if (bothConfirmed()) {
+      setTimeout(() => {
+      changeTimer();
+      revealHand();
+      }, 800);
+    }
     document.getElementById(
       "p2side"
     ).innerHTML = `<img src="${QUESTION_MARK_SRC}" height="200" draggable="false">`;
@@ -275,12 +306,13 @@ function continueRound() {
     changeTimer();
     revealHand();
   }
-  document.getElementById("wrapper").innerHTML = `
-                   <svg class="approve_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                        <circle class="approve_icon_circle" cx="26" cy="26" r="25" fill="none" />
-                        <path class="approve_icon_check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-                    </svg>
-    `;
+  showCheckmark("p1");
+    if (bothConfirmed()) {
+      setTimeout(() => {
+      changeTimer();
+      revealHand();
+      }, 800);
+    }
   document.querySelectorAll("#p1-buttons button").forEach((btn) => {
     if (!btn.classList.contains("active")) {
       btn.setAttribute("disabled", "");
@@ -289,6 +321,7 @@ function continueRound() {
 }
 
 function playAgain() {
+    numOfRounds++;
     const btn = document.getElementById("playagain-btn");
     btn.style.visibility = "visible";
     btn.removeAttribute("disabled");
@@ -341,7 +374,7 @@ function playAgain() {
       resetGameUI();
       loadGame();
       removeFadeAndHide(document.querySelectorAll("#wrapper"));
-      removeFadeAndHide(document.querySelectorAll("#thinking"));
+      removeFadeAndHide(document.querySelectorAll("#player2-side #thinking"));
       document.getElementById('wrapper').innerHTML = ``;
   };
 }
@@ -429,7 +462,7 @@ function resetGameUI() {
     btn.style.padding = "22px 41px 22px 41px"; // reset to square padding
   });
 
-  const thinking = document.getElementById("thinking");
+  const thinking = document.querySelector("#player2-side #thinking");
   if (thinking) {
     thinking.innerHTML = `<h1>Selecting<span class="dots"></span></h1>`;
   }
@@ -437,8 +470,8 @@ function resetGameUI() {
   document.querySelectorAll("svg.approve_icon").forEach((el) => {
     el.style.visibility = "hidden";
   });
-  document.querySelectorAll(".radial_stripes").forEach((el) => {
-    el.style.visibility = "hidden";
+  document.querySelectorAll(".radial_stripes").forEach(el => {
+  el.innerHTML = "";
   });
 
   showElement("arrow-guide");
@@ -478,12 +511,10 @@ function resetRound() {
     img.classList.remove("scale-up");
     });
   document.querySelector("#p2side img").classList.remove("scale-up-p2");
-  // removeFadeAndHide(document.querySelectorAll("svg.approve_icon"));
-  removeFadeAndHide(document.querySelectorAll("#thinking"));
+  removeFadeAndHide(document.querySelectorAll("#player2-side #thinking"));
   removeFadeAndHide(document.querySelectorAll("#wrapper"));
   removeFadeAndHide(document.querySelectorAll("#p2-buttons button"));
   removeFadeAndHide(document.querySelectorAll("#p2-buttons button"));
-  // removeFadeAndHide(document.querySelectorAll(".radial_stripes"));
   removeFadeAndHide(document.querySelectorAll("#p1-buttons button"));
   document.getElementById('tie-slot').innerHTML = "";
   // stop shaking only on the P1 active image (if any)
@@ -541,10 +572,12 @@ function showTie() {
 // reveal p2 hand
 function revealHand() {
   let player2hand = playableHands[getRandomIntInclusive(1, 3)]();
+  setTimeout(() => {
+    fadeAndHide(document.querySelectorAll("#player2-side #thinking"));
+    fadeAndHide(document.querySelectorAll("#wrapper"));
     fadeAndHide(document.querySelectorAll("#p1-buttons button"));
     fadeAndHide(document.querySelectorAll("#p2-buttons button"));
-    fadeAndHide(document.querySelectorAll("#thinking"));
-    fadeAndHide(document.querySelectorAll("#wrapper"));
+  }, 1500);
   setTimeout(() => {
     // fadeAndHide(document.querySelectorAll("svg.approve_icon"));
     // fadeAndHide(document.querySelectorAll(".radial_stripes"));
@@ -631,8 +664,18 @@ function revealHand() {
     console.log(winner);
     // winning animation
     if (winner === "p1") {
-      document.querySelector("#played-hand .radial_stripes").style.visibility =
-        "visible";
+      document.querySelector("#played-hand .radial_stripes").innerHTML = `
+        <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1003.97 1009.5">
+        <defs>
+            <style>.cls-1{fill-rule:evenodd;fill:url(#radial-gradient);}</style>
+            <radialGradient id="radial-gradient" cx="615.23" cy="557.75" r="503.37" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#fff" stop-opacity="0.5"></stop>
+            <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+            </radialGradient>
+        </defs>
+        <title>radial-stripes</title>
+        <path class="cls-1" d="M615.23,53V557.75L510.29,64ZM318.54,149.4,615.23,557.75,409.93,96.64Zm-140.44,156L615.23,557.75,240.13,220ZM113.24,505l502,52.76-480-156Zm21.94,208.74,480.05-156-502,52.76Zm105,181.76,375.1-337.74L178.1,810.13Zm169.8,123.37,205.3-461.11L318.54,966.1Zm205.3,43.64V557.75L510.29,1051.47Zm205.3-43.64L615.23,557.75l104.94,493.72Zm169.8-123.37L615.23,557.75,911.91,966.1Zm104.94-181.76-480-156,437.13,252.38ZM1117.21,505l-502,52.76,502,52.76Zm-64.85-199.62L615.23,557.75l480-156Zm-140.45-156L615.23,557.75,990.33,220ZM720.17,64,615.23,557.75,820.53,96.64Z" transform="translate(-113.24 -53)"></path>
+    </svg>`;
       const activeP1 = document.querySelector("#played-hand img.active");
       if (activeP1) {
         activeP1.style.filter = "drop-shadow(0 0 0.5rem white)";
@@ -663,7 +706,18 @@ function revealHand() {
     } else if (winner === "p2") {
       document.querySelector(
         "#played-hand-p2 .radial_stripes"
-      ).style.visibility = "visible";
+      ).innerHTML = `
+              <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1003.97 1009.5">
+        <defs>
+            <style>.cls-1{fill-rule:evenodd;fill:url(#radial-gradient);}</style>
+            <radialGradient id="radial-gradient" cx="615.23" cy="557.75" r="503.37" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#fff" stop-opacity="0.5"></stop>
+            <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+            </radialGradient>
+        </defs>
+        <title>radial-stripes</title>
+        <path class="cls-1" d="M615.23,53V557.75L510.29,64ZM318.54,149.4,615.23,557.75,409.93,96.64Zm-140.44,156L615.23,557.75,240.13,220ZM113.24,505l502,52.76-480-156Zm21.94,208.74,480.05-156-502,52.76Zm105,181.76,375.1-337.74L178.1,810.13Zm169.8,123.37,205.3-461.11L318.54,966.1Zm205.3,43.64V557.75L510.29,1051.47Zm205.3-43.64L615.23,557.75l104.94,493.72Zm169.8-123.37L615.23,557.75,911.91,966.1Zm104.94-181.76-480-156,437.13,252.38ZM1117.21,505l-502,52.76,502,52.76Zm-64.85-199.62L615.23,557.75l480-156Zm-140.45-156L615.23,557.75,990.33,220ZM720.17,64,615.23,557.75,820.53,96.64Z" transform="translate(-113.24 -53)"></path>
+    </svg>`;
       document.querySelector("#played-hand-p2 img").style.filter =
         "drop-shadow(0 0 0.5rem white)";
       document.querySelector("#p2side img").classList.add("scale-up-p2");

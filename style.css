@@ -7,7 +7,9 @@ body {
 }
 
 .fade-out {
-  animation: fadeOut 0.5s forwards; /* forwards keeps opacity=0 after anim */
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
 }
 
 .hidden {
@@ -897,11 +899,6 @@ button.gameui-btn:active {
   20%, 100% { opacity: 0; }
 }
 
-@keyframes fadeOut {
-  0%  { opacity: 1; }
-  100% { opacity: 0; display: none;}
-}
-
 @keyframes vanish {
   0% { opacity: 1; visibility: visible; }
   100%    { opacity: 0; visibility: hidden; } /* stays hidden */
@@ -946,11 +943,11 @@ button.gameui-btn:active {
 
 .radial_stripes { 
   position: absolute;
-  visibility: hidden;
   width: 650px;
   height: 650px;
   opacity: 0.4;
   animation: rotate 60s infinite linear;
+  overflow: hidden;
   z-index: -2;
 }
 
@@ -1027,7 +1024,58 @@ button.gameui-btn:active {
 }
 
 @media (max-width: 767px) {
-  #content {
+  .animated-text {
+  font-size: 50px;
+  }
+  #mainscreen {
+    display: flex;
     flex-direction: column-reverse;
   }
+  .dot {
+    max-height: 3vw;
+    max-width: 3vw;
+  }
+
+  .winorloss-dot {
+    width: calc(clamp(16px, 3vw, 26px) - 4px);
+    height: calc(clamp(16px, 3vw, 26px) - 4px);
+  }
+
+  h1 {
+    margin: 0.5rem;
+    font-size: clamp(10px, 4vw, 30px);
+  }
+  #logo img {
+    height: 90px;
+  }
+  #player1-side img {
+  }
+
+  #middle-board {
+    visibility: hidden;
+  }
+
+  #played-hand-p2 {
+    display: none;
+  }
+
+  #played-hand-p2 img {
+    display: none;
+  }
+  
+  #p2-buttons img {
+    width: clamp(24px, 4vw, 38px);  /* was 5vw */
+    height: auto;
+  }
+  #p2-buttons button {
+    padding: clamp(5px, 2vw, 22px) clamp(20px, 4.5vw, 41px);
+  }
+
+  #thinking svg {
+    position: relative;
+    margin: 12px auto;
+    height: 6vw;
+    width: 6vw;
+
+}
 }
